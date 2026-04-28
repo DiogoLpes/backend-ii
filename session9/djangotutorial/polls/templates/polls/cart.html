@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho - Frutas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 2rem;
+        }
+        .back-btn {
+            background: white;
+            color: #ff6b35;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .item-icon {
+            font-size: 2rem;
+        }
+        .item-name {
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .item-price {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        .remove-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .remove-btn:hover {
+            background: #cc0000;
+        }
+        .cart-total {
+            text-align: right;
+            padding: 20px 0;
+            font-size: 1.5rem;
+            color: #333;
+            border-top: 2px solid #ff6b35;
+            margin-top: 20px;
+        }
+        .cart-total span {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        .pay-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .pay-btn:hover {
+            transform: scale(1.02);
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        .empty-cart a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛒 Carrinho</h1>
+        <a href="/" class="back-btn">← Voltar às Frutas</a>
+    </div>
+    
+    <div class="cart-container">
+        {% if cart_items %}
+            {% for item in cart_items %}
+            <div class="cart-item">
+                <div class="item-info">
+                    <span class="item-icon">
+                        {% if item.name == 'Laranja' %}🍊
+                        {% elif item.name == 'Banana' %}🍌
+                        {% elif item.name == 'Figos' %}🍇
+                        {% elif item.name == 'Maçã' %}🍎
+                        {% elif item.name == 'Pera' %}🍐
+                        {% elif item.name == 'Morango' %}🍓
+                        {% elif item.name == 'Uva' %}🍇
+                        {% elif item.name == 'Melancia' %}🍉
+                        {% elif item.name == 'Ananas' %}🍍
+                        {% elif item.name == 'Manga' %}🥭
+                        {% else %}🍎{% endif %}
+                    </span>
+                    <div>
+                        <div class="item-name">{{ item.name }}</div>
+                        <div class="item-price">{{ item.price }}€ × {{ item.quantity }}</div>
+                    </div>
+                </div>
+                <form action="/api/cart/remove/{{ item.product_id }}/" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="remove-btn">Remover</button>
+                </form>
+            </div>
+            {% endfor %}
+            
+            <div class="cart-total">
+                Total: <span>{{ cart_total }}€</span>
+            </div>
+            
+            <form action="/api/cart/pay/" method="post">
+                {% csrf_token %}
+                <button type="submit" class="pay-btn">💳 Pagar {{ cart_total }}€</button>
+            </form>
+        {% else %}
+            <div class="empty-cart">
+                <h2>🛒 Carrinho vazio</h2>
+                <p>Volta <a href="/">aqui</a> para adicionar produtos</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

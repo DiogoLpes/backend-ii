@@ -1,3 +1,5 @@
+.PHONY: up down build install
+
 up:
 	docker compose -f dockercompose.yaml up --build
 
@@ -8,4 +10,4 @@ build:
 	docker compose -f dockercompose.yaml build
 
 install:
-	pip install -r requirements.txt
+	uv pip install -r requirements.txt
