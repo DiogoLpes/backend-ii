@@ -1,0 +1,16 @@
+root = True
+
+[*]
+indent_style = space
+indent_size = 4
+
+[*.py] #qualquer arquivo python
+indent_size = 2
+
+[package.json] #para arquivos package.json
+indent_size = 2
+
+[makefile] #para arquivos makefile
+indent_style = tab #serve para arquivos makefile, onde a indentação é feita com tabulação
+
+
