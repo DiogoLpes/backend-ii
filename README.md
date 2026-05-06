@@ -627,7 +627,7 @@ gRPC is a high-performance RPC framework that uses Protocol Buffers for data ser
 
     if __name__ == "__main__":
         serve()
-    ``` 
+    ```
 ### Exercise:
 
 - Problem: Build a basic gRPC service that returns the cube of a number.
@@ -824,7 +824,7 @@ CI/CD stands for Continuous Integration and Continuous Deployment. It automates 
 
 - Problem: Extend the CI/CD pipeline to include a deployment step that runs only when code is pushed to the main branch.
     - Hint: Use conditional steps and job dependencies.
- 
+
 
 ## Project Module: Agentic AI backend solution
 
@@ -850,7 +850,7 @@ The primary objective of this project is to design and develop a robust Python b
 To achieve the objective and meet the project goal, the following requirements must be addressed:
 
 #### Functional Requirements
-    
+
 - AI Agents Integration:
     - Utilise Crew AI to manage AI agents responsible for tasks such as data analysis, real-time recommendations, or process automation.
     - Develop clear interfaces for communication between the backend and the AI agents.
@@ -891,7 +891,7 @@ Your project will be evaluated based on the quality of what you deliver and how 
 
 2. **Backend Application** (2 points)
    - Built with **FastAPI**, **Django**, or a **CLI-based solution**.
- 
+
 3. **AI Agent Integration** (4 points)
    - At least one AI agent using **Crew AI**.
    - Clear interface between your backend and the agent(s).

@@ -4,7 +4,7 @@ class Shape(ABC):
     @abstractmethod
     def draw(self):
         pass
-    
+
 class Circle(Shape):
     def draw(self):
         pass
@@ -12,4 +12,3 @@ class Circle(Shape):
 class Square(Shape):
     def draw(self):
         pass
-

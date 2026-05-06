@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.post("/pay")
 async def pay(payload:PaymentRequest):
-    
+
     provider:PaymentBaseAdapter = PaymentProviderFactory().get_provider(name=payload.payment_method)
     await provider.pay(payload.payment_payload)
     return 1

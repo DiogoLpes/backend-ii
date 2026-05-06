@@ -10,9 +10,9 @@ async def main():
     tarefa1 = asyncio.create_task(saudacao("Alice", 3))
     tarefa2 = asyncio.create_task(saudacao("Bruno", 1))
     tarefa3 = asyncio.create_task(saudacao("Carlos", 2))
-    
+
     print("Iniciei as saudações...")
-    
+
     # Esperamos que ambas terminem
     await tarefa1
     await tarefa2

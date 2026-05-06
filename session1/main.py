@@ -30,10 +30,10 @@ def factorial(n:int) -> int:
 	if n == 0:
 		return 1
 	return n * factorial(n-1)
-	
+
 if __name__ == "__main__":
 	lst_element = [0,1,10,100,1_1000,10_000,100_000,1_000_000]
-	
+
 	# for el in lst_element:
 	# 	start = time.perf_counter()
 	# 	logging.info(f"Searching for element {el-1} in list of size {el}.")
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 	# 	end = time.perf_counter()
 	# 	logging.info(f"Element {target} found in list: {result}")
 	# 	logging.info(f"Time taken: {end - start} seconds")
-	
+
 	for el in lst_element:
 		start = time.perf_counter()
 		logging.info(f"Searching for element {el-1} in list of size {el}.")

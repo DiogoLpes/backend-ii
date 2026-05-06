@@ -127,7 +127,7 @@
         <h1>🛒 Carrinho</h1>
         <a href="/" class="back-btn">← Voltar às Frutas</a>
     </div>
-    
+
     <div class="cart-container">
         {% if cart_items %}
             {% for item in cart_items %}
@@ -157,11 +157,11 @@
                 </form>
             </div>
             {% endfor %}
-            
+
             <div class="cart-total">
                 Total: <span>{{ cart_total }}€</span>
             </div>
-            
+
             <form action="/api/cart/pay/" method="post">
                 {% csrf_token %}
                 <button type="submit" class="pay-btn">💳 Pagar {{ cart_total }}€</button>

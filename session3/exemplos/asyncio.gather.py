@@ -8,9 +8,9 @@ async def simular_api(id_chamada):
 
 async def main():
     inicio = time.time()
-    
+
     print("Fazendo 5 chamadas de uma vez...")
-    
+
     # O gather junta várias corrotinas e executa-as em simultâneo
     resultados = await asyncio.gather(
         simular_api(1),
@@ -19,10 +19,10 @@ async def main():
         simular_api(4),
         simular_api(5)
     )
-    
+
     for r in resultados:
         print(r)
-        
+
     fim = time.time()
     print(f"\nTempo total: {fim - inicio:.2f} segundos")
     print("Nota: Cada chamada demora 2s, mas o total foi ~2s e não 10s!")

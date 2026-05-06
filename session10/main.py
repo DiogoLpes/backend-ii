@@ -45,11 +45,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     # Por enquanto, aceitamos qualquer user/pass para teste
     payload = {"sub": form_data.username}
     token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-    
+
     # O Swagger precisa que você retorne 'token_type' como 'bearer'
     return {"access_token": token, "token_type": "bearer"}
-
-
-
-
-

@@ -43,10 +43,10 @@ class Query:
             books_db = db.query(BookModel).all()
             return [
                 Book(
-                    id=b.id, 
-                    title=b.title, 
-                    author=b.author, 
-                    genre=b.genre, 
+                    id=b.id,
+                    title=b.title,
+                    author=b.author,
+                    genre=b.genre,
                     published_year=b.published_year
                 ) for b in books_db
             ]
@@ -72,21 +72,21 @@ class Mutation:
         db = SessionLocal()
         try:
             new_book_db = BookModel(
-                title=title, 
-                author=author, 
-                genre=genre, 
+                title=title,
+                author=author,
+                genre=genre,
                 published_year=published_year
             )
             db.add(new_book_db)
             db.commit()
             db.refresh(new_book_db)
-            
+
 
             return Book(
-                id=new_book_db.id, 
-                title=new_book_db.title, 
-                author=new_book_db.author, 
-                genre=new_book_db.genre, 
+                id=new_book_db.id,
+                title=new_book_db.title,
+                author=new_book_db.author,
+                genre=new_book_db.genre,
                 published_year=new_book_db.published_year
             )
         finally:

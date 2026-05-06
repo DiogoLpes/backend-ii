@@ -6,7 +6,3 @@ bleach
 passlib[bcrypt]
 sqlalchemy
 psycopg2-binary
-
-
-
-

@@ -10,13 +10,13 @@ import json
 def home(request):
     """Main products page with HTML UI"""
     products = Product.objects.all()
-    
+
     # Get current cart
     user_id = 1
     cart_order = Order.objects.filter(user_id=user_id, paid=False).first()
     cart_items = cart_order.cart if cart_order and cart_order.cart else []
     cart_total = cart_order.total if cart_order else 0
-    
+
     return render(request, "polls/products.html", {
         "products": products,
         "cart_items": cart_items,
@@ -30,7 +30,7 @@ def cart_page(request):
     cart_order = Order.objects.filter(user_id=user_id, paid=False).first()
     cart_items = cart_order.cart if cart_order and cart_order.cart else []
     cart_total = cart_order.total if cart_order else 0
-    
+
     return render(request, "polls/cart.html", {
         "cart_items": cart_items,
         "cart_total": cart_total
@@ -47,7 +47,7 @@ def product_list(request):
             for p in products
         ]
         return JsonResponse({"products": data}, status=200)
-    
+
     elif request.method == "POST":
         try:
             body = json.loads(request.body)
@@ -66,14 +66,14 @@ def product_list(request):
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    
+
     if request.method == "GET":
         return JsonResponse({
             "id": product.pk,
             "name": product.name,
             "price": product.price
         })
-    
+
     elif request.method == "PUT":
         body = json.loads(request.body)
         product.name = body.get("name", product.name)
@@ -84,7 +84,7 @@ def product_detail(request, product_id):
             "name": product.name,
             "price": product.price
         })
-    
+
     elif request.method == "DELETE":
         product.delete()
         return JsonResponse({"message": "Product deleted"}, status=204)
@@ -107,12 +107,12 @@ def order_list(request):
             for o in orders
         ]
         return JsonResponse({"orders": data}, status=200)
-    
+
     elif request.method == "POST":
         try:
             body = json.loads(request.body)
             user_id = body.get("user_id")
-            
+
             order = Order.objects.create(
                 user_id=user_id,
                 cart=[],
@@ -130,7 +130,7 @@ def order_list(request):
 
 def order_detail(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
-    
+
     if request.method == "GET":
         return JsonResponse({
             "id": order.pk,
@@ -140,7 +140,7 @@ def order_detail(request, order_id):
             "paid": order.paid,
             "updated": order.update_time.isoformat()
         })
-    
+
     elif request.method == "DELETE":
         order.delete()
         return JsonResponse({"message": "Order deleted"}, status=204)
@@ -149,31 +149,31 @@ def order_detail(request, order_id):
 @require_http_methods(["POST"])
 def add_to_cart(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
-    
+
     if order.paid:
         return JsonResponse({"error": "Order already paid"}, status=400)
-    
+
     try:
         body = json.loads(request.body)
         product_id = body.get("product_id")
         quantity = body.get("quantity", 1)
-        
+
         product = get_object_or_404(Product, pk=product_id)
-        
+
         cart_item = {
             "product_id": product.pk,
             "name": product.name,
             "price": product.price,
             "quantity": quantity
         }
-        
+
         cart = order.cart if order.cart else []
         cart.append(cart_item)
         order.cart = cart
-        
+
         order.total = sum(item["price"] * item["quantity"] for item in cart)
         order.save()
-        
+
         return JsonResponse({
             "message": "Product added to cart",
             "cart": order.cart,
@@ -188,26 +188,26 @@ def add_to_cart(request, order_id):
 @require_http_methods(["POST"])
 def remove_from_cart(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
-    
+
     if order.paid:
         return JsonResponse({"error": "Order already paid"}, status=400)
-    
+
     try:
         body = json.loads(request.body)
         product_id = body.get("product_id")
-        
+
         cart = order.cart if order.cart else []
-        
+
         original_len = len(cart)
         cart = [item for item in cart if item.get("product_id") != product_id]
-        
+
         if len(cart) == original_len:
             return JsonResponse({"error": "Product not in cart"}, status=404)
-        
+
         order.cart = cart
         order.total = sum(item["price"] * item["quantity"] for item in cart)
         order.save()
-        
+
         return JsonResponse({
             "message": "Product removed from cart",
             "cart": order.cart,
@@ -220,16 +220,16 @@ def remove_from_cart(request, order_id):
 @require_http_methods(["POST"])
 def pay_order(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
-    
+
     if order.paid:
         return JsonResponse({"error": "Order already paid"}, status=400)
-    
+
     if not order.cart:
         return JsonResponse({"error": "Cart is empty"}, status=400)
-    
+
     order.paid = True
     order.save()
-    
+
     return JsonResponse({
         "message": "Order paid successfully",
         "order_id": order.pk,
@@ -243,12 +243,12 @@ def pay_order(request, order_id):
 def cart_view(request):
     """Get or create current user's cart"""
     user_id = 1
-    
+
     order = Order.objects.filter(user_id=user_id, paid=False).first()
-    
+
     if not order:
         order = Order.objects.create(user_id=user_id, cart=[], total=0)
-    
+
     return JsonResponse({
         "cart": order.cart,
         "total": order.total,
@@ -260,13 +260,13 @@ def cart_view(request):
 def add_to_cart_simple(request, product_id):
     """Add product to cart (simpler version)"""
     user_id = 1
-    
+
     order = Order.objects.filter(user_id=user_id, paid=False).first()
     if not order:
         order = Order.objects.create(user_id=user_id, cart=[], total=0)
-    
+
     product = get_object_or_404(Product, pk=product_id)
-    
+
     cart = order.cart if order.cart else []
     cart.append({
         "product_id": product.pk,
@@ -274,11 +274,11 @@ def add_to_cart_simple(request, product_id):
         "price": product.price,
         "quantity": 1
     })
-    
+
     order.cart = cart
     order.total = sum(item["price"] * item["quantity"] for item in cart)
     order.save()
-    
+
     return JsonResponse({
         "message": f"{product.name} added to cart",
         "cart": order.cart,
@@ -290,18 +290,18 @@ def add_to_cart_simple(request, product_id):
 def remove_from_cart_simple(request, product_id):
     """Remove product from cart (simpler version)"""
     user_id = 1
-    
+
     order = Order.objects.filter(user_id=user_id, paid=False).first()
     if not order:
         return JsonResponse({"error": "Cart is empty"}, status=400)
-    
+
     cart = order.cart if order.cart else []
     cart = [item for item in cart if item.get("product_id") != product_id]
-    
+
     order.cart = cart
     order.total = sum(item["price"] * item["quantity"] for item in cart)
     order.save()
-    
+
     return JsonResponse({
         "message": "Product removed from cart",
         "cart": order.cart,
@@ -313,17 +313,17 @@ def remove_from_cart_simple(request, product_id):
 def pay_cart(request):
     """Pay for the current cart"""
     user_id = 1
-    
+
     order = Order.objects.filter(user_id=user_id, paid=False).first()
     if not order:
         return JsonResponse({"error": "No active cart"}, status=400)
-    
+
     if not order.cart:
         return JsonResponse({"error": "Cart is empty"}, status=400)
-    
+
     order.paid = True
     order.save()
-    
+
     return JsonResponse({
         "message": "Order paid successfully!",
         "order_id": order.pk,

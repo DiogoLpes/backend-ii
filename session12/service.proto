@@ -1,0 +1,14 @@
+syntax = "proto3";
+package service;
+
+service Calculator {
+    rpc Cube (NumberRequest) returns (NumberReply) {}
+}
+
+message NumberRequest {
+    int32 number = 1;
+}
+
+message NumberReply {
+    int32 result = 1;
+}

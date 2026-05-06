@@ -7,12 +7,12 @@ class PaymentProviderFactory:
         "mbway": "MBWayPayment",
         "paypal": "PaypalPayment"
     }
-    
+
     def get_provider(self, name: str) -> PaymentBaseAdapter:
-        
+
         provider = self.REGISTRY.get(name,None)
-        
+
         if not provider:
             raise ValueError(f"Método de pagamento '{name}' não suportado.")
-        
+
         return provider()
